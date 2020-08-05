@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>Registra orari</title>
+</head>
+
+<body>
+    <div class="main">
+        <div class="header">
+            <i class="material-icons dateRefreshOff" id="dateRefresh" onclick="dateRefresh()">autorenew</i>
+            <p id="date" onclick="editDataStart()">[date]</p>
+            <p class="tapToEdit" onclick="editDataStart()">Tocca per cambiare giorno</p>
+        </div>
+
+
+        <div class="content">
+            <button class="bButton red" id="regEnt" onclick="register('enter')">
+                Registra</br>entrata
+            </button>
+            <button class="bButton green" id="regExit" onclick="register('exit')">
+                Registra</br>uscita
+            </button>
+            <!-- <button class="bButton blue" id="regFin" onclick="register('final')">
+                Registra</br>giornata
+            </button> -->
+        </div>
+
+        <div class="actualRegs">
+            <p class="fixedP">Orario entrata mattino:</p>
+            <div class="regTime">
+                <p id="timeEntMor" style="color: #e99679;">No registration</p>
+                <div class="checkIcon edit">
+                    <i class="material-icons" id="editIcon1" onclick="editRowStart(this)">edit</i>
+                </div>
+                <div class="checkIcon bin">
+                    <i class="material-icons" id="binIcon1" onclick="deleteRow(this)">delete</i>
+                </div>
+                <div class="checkIcon state">
+                    <i class="material-icons" id="checkEntMor">clear</i>
+                </div>
+            </div>
+
+            <p class="fixedP">Orario uscita mattino:</p>
+            <div class="regTime">
+                <p id="timeExitMor" style="color: #e99679;">No registration</p>
+                <div class="checkIcon edit">
+                    <i class="material-icons" id="editIcon2" onclick="editRowStart(this)">edit</i>
+                </div>
+                <div class="checkIcon bin">
+                    <i class="material-icons" id="binIcon2" onclick="deleteRow(this)">delete</i>
+                </div>
+                <div class="checkIcon state">
+                    <i class="material-icons" id="checkExitMor">clear</i>
+                </div>
+            </div>
+
+            <p class="fixedP">Orario entrata pomeriggio:</p>
+            <div class="regTime" >
+                <p id="timeEntPom" style="color: #e99679;">No registration</p>
+                <div class="checkIcon edit">
+                    <i class="material-icons" id="editIcon3" onclick="editRowStart(this)">edit</i>
+                </div>
+                <div class="checkIcon bin">
+                    <i class="material-icons" id="binIcon3" onclick="deleteRow(this)">delete</i>
+                </div>
+                <div class="checkIcon state">
+                    <i class="material-icons" id="checkEntPom">clear</i>
+                </div>
+            </div>
+
+            <p class="fixedP">Orario uscita pomeriggio:</p>
+            <div class="regTime">
+                <p id="timeExitPom" style="color: #e99679;">No registration</p>
+                <div class="checkIcon edit">
+                    <i class="material-icons" id="editIcon4" onclick="editRowStart(this)">edit</i>
+                </div>
+                <div class="checkIcon bin">
+                    <i class="material-icons" id="binIcon4" onclick="deleteRow(this)">delete</i>
+                </div>
+                <div class="checkIcon state">
+                    <i class="material-icons" id="checkExitPom">clear</i>
+                </div>
+            </div>
+            <p class="fixedP">Totale ore "lavorate":</p>
+            <div class="regTime">
+                <p id="timeTotal" style="color: #fe4c68;">Invalid</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="popUpEditOff" id="popUpEdit">
+        <div id="timeInputBox">
+            <input type="time" id="timeInput" value="00:00" oninput="checkInput(this)">
+        </div>
+
+        <button id="editConfirm" class="editConfimClick buttonOff" onclick="editRowEnd(this)">Ok</button>
+        <button id="editCancel" class="editConfimClick" onclick="editRowEnd(this)">Annulla</button>
+    </div>
+    
+    <div class="popUpEditOff" id="popUpDateEdit">
+        <div id="dateInputBox">
+            <input type="date" id="dateInput">
+        </div>
+
+        <button id="editDateConfirm" class="editConfimClick buttonOn" onclick="editDateEnd(this)">Ok</button>
+        <button id="editDateCancel" class="editConfimClick" onclick="editDateEnd(this)">Annulla</button>
+    </div>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/7.17.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+             https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="/__/firebase/7.17.1/firebase-analytics.js"></script>
+
+    <script src="/__/firebase/7.17.1/firebase-firestore.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+
+
+    <script src="app.js"></script>
+
+
+</body>
+
+</html>

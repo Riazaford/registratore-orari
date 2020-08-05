@@ -1,0 +1,426 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: rgba(255, 244, 244, 0.938);   
+
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+.main{
+    height: 100vh;
+     
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    justify-content: space-around;
+
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #fbac7ebe 0%, #f7cf68bb 100%);
+
+}
+.header{
+    margin: 0px;  
+    padding-top: 15px;
+    display: inline;
+    text-align: center;
+    transition : 0.2s ease;
+}
+.header > p{
+    font-size: 22px;
+    line-height: 50px;
+
+    color: rgb(255, 255, 255);
+    text-shadow: 0px 1px rgba(0, 0, 0, 0.096);
+
+    cursor: default;
+}
+.header:active{
+    transform: scale(0.5);
+}
+.tapToEdit{
+    font-style: italic;
+
+}
+.content{
+    height: 30vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    
+}
+.bButton {
+    height: 80px;
+    width: 230px;
+    
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.19);
+
+    border: none;
+    border-radius: 3px;
+
+    font-size: 23px;
+    font-weight: 300;
+    text-shadow: 1px -1px 3px rgba(0, 0, 0, 0.233);
+
+    cursor: pointer;
+
+    transition: 0.1s ease;
+}
+.red{
+    background-image: linear-gradient(45deg , #fd7474 0%, #fc8c70f5 50% );
+}
+.green{
+    background-image: linear-gradient(45deg , #64c75b 0%, #7ddd60f5 50% );
+}
+.blue{
+    background-image: linear-gradient(45deg , #5bc7af 0%, #60ddddf5 50% );
+}
+.buttonClicked{
+    animation: click 0.3s linear forwards;
+}
+@keyframes click{
+    0%      { scale: 1;}
+    50%     { scale: 0.96;}
+    100%    { scale: 1;} 
+}
+.actualRegs{
+    height: 400px;
+    width: 100%;
+    
+    padding-left: 10%;
+    padding-right: 10%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    justify-content: space-around;
+}
+.fixedP{
+    color: rgba(0, 0, 0, 0.582);
+    text-shadow: 0px 1px rgba(0, 0, 0, 0.096);
+}
+.regTime{
+    border: 1px solid  #ff7c7c;
+    border-radius: 3px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.096);
+
+    width: 100%;
+    padding: 10px;
+    
+    display: grid;
+    align-items: center;
+    grid-template-columns: auto 30px 30px 30px;
+}
+.regTime > p{
+    grid-row: 1 ;
+    grid-column: 1;
+}
+.textShake{
+    animation: shake 0.2s linear forwards;
+}
+@keyframes shake{
+    0% {
+        padding-left: 0px;
+        font-style: normal;
+    }
+    50% { 
+        padding-left: 5px;
+        font-style: italic;
+    }
+    100% {
+        padding-left: 0px;
+        font-style: normal;
+    }
+}
+.checkIcon{
+    cursor: default;
+    justify-self: center;
+}
+.checkIcon > i{
+    height: 20px;
+    width: 20px;
+
+    font-size: 15px;
+    text-align: center;
+
+    padding-top: 1px;
+    
+    border-radius: 100%;
+    
+    text-shadow:  1px 1px 1px rgba(0, 0, 0, 0.096);
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.096);
+
+}
+.material-icons{
+
+    border-radius: 100%;
+    
+    padding: 1px;
+
+    text-shadow:  1px 1px 1px rgba(0, 0, 0, 0.096);
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.096);
+
+    color: rgba(255, 255, 255, 0.863);
+    border: 2px solid rgba(255, 244, 244, 0.938);
+    transition: 0.1s ease;
+
+    opacity: 1;
+}
+
+.dateRefreshOff{
+    animation : dateRefreshOff 0.5s ease forwards;
+}
+@keyframes dateRefreshOff{
+    0%{
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+    100%{
+        opacity: 0;
+        transform: rotate(180deg);
+    }
+} 
+.dateRefreshOn{
+    animation : dateRefreshOn 0.5s ease forwards;
+}
+@keyframes dateRefreshOn{
+    0%{
+        opacity: 0;
+        transform: rotate(0deg);
+    }
+    100%{
+        opacity: 1;
+        transform: rotate(180deg);
+    }
+} 
+.edit{
+    grid-row: 1 ;
+    grid-column: 2;   
+
+    cursor: pointer;
+}
+.bin{
+    grid-row: 1 ;
+    grid-column: 3;   
+
+    cursor: pointer;
+}
+.state{
+    grid-row: 1 ;
+    grid-column: 4;
+
+    pointer-events: none;
+}
+.redBin{
+    animation: redBin 0.5s linear forwards;
+}
+@keyframes redBin{
+    0%{
+        color: rgba(255, 255, 255, 0.747);
+        border: 2px solid rgba(255, 244, 244, 0.938);
+    }
+    25%{
+        color: rgba(255, 10, 10, 0.411);
+        border: 2px solid rgba(255, 5, 5, 0.555);
+    }
+    100%{
+        color: rgba(255, 255, 255, 0.747);
+        border: 2px solid rgba(255, 244, 244, 0.938);
+    }
+}
+.greenEdit{
+    animation: greenEdit 0.5s linear forwards;
+}
+@keyframes greenEdit{
+    0%{
+        color: rgba(255, 255, 255, 0.747);
+        border: 2px solid rgba(255, 244, 244, 0.938);
+    }
+    25%{
+        color: rgba(39, 255, 10, 0.411);
+        border: 2px solid rgba(47, 255, 5, 0.555);
+    }
+    100%{
+        color: rgba(255, 255, 255, 0.747);
+        border: 2px solid rgba(255, 244, 244, 0.938);
+    }
+}
+.checked{
+    color: rgba(150, 245, 121, 0.747);
+    border: 2px solid rgba(157, 247, 130, 0.747);
+}
+#popUpEdit{
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-150px,-100px);
+    height: 200px;
+    width: 300px;
+
+    border: 1px solid rgba(226, 36, 36, 0.11);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.74);
+    border-radius: 10px;
+    
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #fbac7ebe 0%, #f7cf68bb 100%);
+   
+    color: rgba(0, 0, 0, 0.459);
+    
+    display: grid;
+    grid-template-areas:
+        "input input"
+        "ok cancel";
+    grid-template-columns: 1fr 1fr;
+    
+    gap: 10px;
+    padding: 10px;
+    align-items: center;
+    text-align: center;
+
+}
+#timeInputBox{
+    border-style: hidden;
+    border-radius: 20px;
+    background-color: rgba(255, 237, 211, 0.925);
+    grid-area: input;
+}
+#timeInput{
+    color: rgba(0, 0, 0, 0.568);
+    border-style: hidden;
+    background-color: rgba(255, 237, 211, 0);
+
+    padding-left: 15px;
+    font-size: 60px;  
+}
+#editConfirm{
+    border: 1px solid rgba(255, 100, 100, 0.644);
+
+    border-radius: 15px;
+    background-color: rgb(255, 237, 211);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.603);
+
+    padding: 10px;
+    font-size: 32px;
+
+    cursor: pointer;
+
+    grid-area: ok;
+}
+.editConfimClick{
+    animation: editConfimClick 0.3s linear forwards;
+}
+@keyframes editConfimClick{
+    0%{ transform: scale(1);}
+    20%{ transform: scale(0.9);}
+    100%{ transform: scale(1);}
+}
+#editCancel{
+    color: rgba(0, 0, 0, 0.568);
+    border: 1px solid rgba(255, 100, 100, 0.644);
+
+    border-radius: 15px;
+    background-color: rgb(255, 237, 211);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.603);
+
+    padding: 10px;
+    font-size: 32px;
+
+    cursor: pointer; 
+
+    grid-area: cancel;
+}
+#popUpDateEdit{
+    position: absolute;
+    top: 13vh;
+    left: 50vw;
+    transform: translate(-150px,-100px);
+    height: 200px;
+    width: 300px;
+
+    border: 1px solid rgba(226, 36, 36, 0.11);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.74);
+    border-radius: 10px;
+    
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #fbac7ebe 0%, #f7cf68bb 100%);
+   
+    color: rgba(0, 0, 0, 0.459);
+    
+    display: grid;
+    grid-template-areas:
+        "input input"
+        "ok cancel";
+    grid-template-columns: 1fr 1fr;
+    
+    gap: 10px;
+    padding: 10px;
+    align-items: center;
+    text-align: center;
+
+}
+#dateInputBox{
+    border-style: hidden;
+    border-radius: 20px;
+    background-color: rgba(255, 237, 211, 0.925);
+    grid-area: input;
+}
+#dateInput{
+    color: rgba(0, 0, 0, 0.568);
+    border-style: hidden;
+    background-color: rgba(255, 237, 211, 0);
+
+    padding-left: 15px;
+    font-size: 30px;  
+}
+#editDateConfirm{
+    border: 1px solid rgba(255, 100, 100, 0.644);
+
+    border-radius: 15px;
+    background-color: rgb(255, 237, 211);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.603);
+
+    padding: 10px;
+    font-size: 32px;
+
+    cursor: pointer;
+
+    grid-area: ok;
+}
+#editDateCancel{
+    color: rgba(0, 0, 0, 0.568);
+    border: 1px solid rgba(255, 100, 100, 0.644);
+
+    border-radius: 15px;
+    background-color: rgb(255, 237, 211);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.603);
+
+    padding: 10px;
+    font-size: 32px;
+
+    cursor: pointer; 
+
+    grid-area: cancel;
+}
+.popUpEditOff{
+    visibility: hidden;
+    transition: 0.8s;
+}
+.popUpEditOn{
+    visibility: visible;
+    transition: 0.8s;
+}
+.buttonOn{
+    pointer-events: all;
+    color: rgba(0, 0, 0, 0.568);
+}
+.buttonOff{
+    pointer-events: none;
+    color: rgb(143, 143, 143);
+}
