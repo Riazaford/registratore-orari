@@ -51,10 +51,16 @@ const checks = [
 
 const dateTimeLabel = document.getElementById("date");
 const dataRefreshIcon = document.getElementById("dateRefresh");
+var selectedDate;
 
 function dateInit() {
     let date = new Date();
     dateTimeLabel.innerHTML = "Data e ora di oggi: </br>" + date.toLocaleString();
+    let dateValues = date.toLocaleDateString().split("/");
+    for(let x = 0; x < 3; x++){
+        if(dateValues[x].length == 1) dateValues[x] = "0"+ dateValues[x];
+    }
+    selectedDate = dateValues[2] + "-" + dateValues[1] + "-" + dateValues[0];
     //dateTimeLabel.innerHTML = "Data e ora di oggi: </br>" + date.toISOString();
 
 }
@@ -157,13 +163,13 @@ function editDataStart() {
 }
 function editDateEnd(button) {
     if (button.id == "editDateConfirm") {
-        let newDate = document.getElementById("dateInput").value;
-        dateTimeLabel.innerHTML = "Giornata in visualizzazione : </br>" + newDate;
+        selectedDate = document.getElementById("dateInput").value;
+        dateTimeLabel.innerHTML = "Giornata in visualizzazione : </br>" + selectedDate;
 
         dataRefreshIcon.classList.remove("dateRefreshOff");
         dataRefreshIcon.classList.add("dateRefreshOn");
 
-        updateDataFromDB(newDate);
+        updateDataFromDB(selectedDate);
 
         clearInterval(interval);
         animationRefresh("editDateConfirm", "editConfimClick");
@@ -179,7 +185,7 @@ function dateRefresh() {
     dataRefreshIcon.classList.remove("dateRefreshOn");
     dateInit();
     clockInit();
-    updateDataFromDB(;);
+    updateDataFromDB(selectedDate);
 }
 
 function newFieldValue(checkId) {
@@ -236,22 +242,19 @@ function hoursCount() {
 
     let text, color;
 
-    if(valid){
+    if (valid) {
         text = hourLast + ":" + minLast;
         color = "white"
-        
-    }else{
+
+    } else {
         text = "Invalid";
         color = "#fe4c68"
-    } 
-
-    
+    }
 
     document.getElementById("timeTotal").innerHTML = text;
     document.getElementById("timeTotal").style.color = color;
 
-    updateDB();
-
+    updateDB(selectedDate);
 
 }
 
@@ -281,46 +284,49 @@ function updateDataFromDB(date) {
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
+
+                document.getElementById("timeTotal").innerHTML = "Invalid";
+                document.getElementById("timeTotal").style.color = "#fe4c68";
+
             }
         })
         .catch(function (error) {
             console.log("Error getting document:", error);
         });
 
-
-
 }
 function updateDB(date) {
+
+    //try {
     console.log("Updating data  : ", date);
-    try {
-        db.collection("registrazioni").doc(date)
-            .update({
-                In_mor : regs[0].innerHTML,
-                Out_mor : regs[1].innerHTML,
-                In_pom : regs[2].innerHTML,
-                Out_pom : regs[3].innerHTML
-            })
-            .then(function () {
-                console.log("Document updated");
-            })
+    db.collection("registrazioni").doc(date)
+        .update({
+            In_mor: regs[0].innerHTML,
+            Out_mor: regs[1].innerHTML,
+            In_pom: regs[2].innerHTML,
+            Out_pom: regs[3].innerHTML
+        })
+        .then(function () {
+            console.log("Document updated");
+        })
+        .catch(function (error) {
+            console.log("Documento non trovato, creo nuovo documento");
+            console.log("Creating data  : ", date);
 
-    } catch (error) {
-        try {
             db.collection("registrazioni").doc(date)
-            .set({
-                In_mor : regs[0].innerHTML,
-                Out_mor : regs[1].innerHTML,
-                In_pom : regs[2].innerHTML,
-                Out_pom : regs[3].innerHTML
-            })
-            .then(function () {
-                console.log("Document created");
-            })
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
+                .set({
+                    In_mor: regs[0].innerHTML,
+                    Out_mor: regs[1].innerHTML,
+                    In_pom: regs[2].innerHTML,
+                    Out_pom: regs[3].innerHTML
+                })
+                .then(function () {
+                    console.log("Document created");
+                })
+                .catch(function (error) {
+                    console.error("Errore nella creazione:", error);
+                })
+        });
 }
 
 //Funzione riavvia l'animazione richiesta disattivando la classe e riattivandola
@@ -333,13 +339,19 @@ function animationRefresh(id, className) {
 function numberIns(str) {
     return str.match(/\d+/g)[0];
 }
-function dateNow(){
-    let dateNow = new Date().toISOString().split("T")[0];
-    let hourNow = new Date().toISOString().split("T")[1].split(" ")[0] + 2;
-    
+
+function dateNow() {
+
+    let dateNow = new Date().toLocaleDateString().split("/")[2] + "-"
+        + new Date().toLocaleDateString().split("/")[1] + "-"
+        + new Date().toLocaleDateString().split("/")[0];
+
+    return dateNow;
+    //let hourNow = new Date().toISOString().split("T")[1].split(" ")[0] + 2;
+
 }
 
 //Init functions
 dateInit();
 clockInit();
-//updateData(new Date().toISOString().split("T")[0]);
+updateDataFromDB(selectedDate);
