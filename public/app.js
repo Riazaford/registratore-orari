@@ -1,6 +1,18 @@
 
 
 /*
+
+/* //OK funzionante
+    db.collection("registrazioni").where("hour", "==", "13:23")
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+        })
+    })
+
+
 db.collection("registrazioni")
     .get()
     .then((querySnapshot) => {
@@ -43,40 +55,33 @@ const dataRefreshIcon = document.getElementById("dateRefresh");
 function dateInit() {
     let date = new Date();
     dateTimeLabel.innerHTML = "Data e ora di oggi: </br>" + date.toLocaleString();
+    //dateTimeLabel.innerHTML = "Data e ora di oggi: </br>" + date.toISOString();
 
 }
 function clockInit() {
     interval = setInterval(dateInit, 1000);
 }
 
-function register(inOut) {
+function newRegistration(buttonType) {
     let hour = new Date().toTimeString().split(":")[0] + ":" + new Date().toTimeString().split(":")[1]; //Hour in format HH:MM;
 
-    if (inOut === "enter") {
+    if (buttonType === "enter") {
         if (hour < "15:00:00") {
             regs[0].innerHTML = hour;
-            regs[0].style.color = "white";
-            checks[0].innerHTML = "check";
-            checks[0].classList.add("checked");
+            newFieldValue(0);
         } else {
             regs[2].innerHTML = hour;
-            regs[2].style.color = "white";
-            checks[2].innerHTML = "check";
-            checks[2].classList.add("checked");
+            newFieldValue(2);
         }
         animationRefresh("regEnt", "buttonClicked");
     }
-    if (inOut === "exit") {
+    if (buttonType === "exit") {
         if (hour < "15:00:00") {
             regs[1].innerHTML = hour;
-            regs[1].style.color = "white";
-            checks[1].innerHTML = "check";
-            checks[1].classList.add("checked");
+            newFieldValue(1);
         } else {
             regs[3].innerHTML = hour;
-            regs[3].style.color = "white";
-            checks[3].innerHTML = "check";
-            checks[3].classList.add("checked");
+            newFieldValue(3);
         }
         animationRefresh("regExit", "buttonClicked");
     }
@@ -85,7 +90,9 @@ function register(inOut) {
 
 }
 function deleteRow(id) {
-    arrayId = numberIns(id.id) - 1; // id.id = binIcon1 
+
+    arrayId = numberIns(id.id) - 1; // id.id = binIcon1
+
 
     regs[arrayId].innerHTML = "No registration";
     regs[arrayId].style.color = "#e99679";
@@ -94,8 +101,8 @@ function deleteRow(id) {
 
     hoursCount();
 
-    animationRefresh(id.id, "redBin");
     animationRefresh(regs[arrayId].id, "textShake");
+    animationRefresh(id.id, "redBin");
 
 }
 function editRowStart(id) {
@@ -133,9 +140,7 @@ function editRowEnd(button) {
         animationRefresh("editConfirm", "editConfimClick");
 
         regs[editingRow].innerHTML = document.getElementById("timeInput").value;
-        regs[editingRow].style.color = "white";
-        checks[editingRow].innerHTML = "check";
-        checks[editingRow].classList.add("checked");
+        newFieldValue(editingRow);
 
         hoursCount();
 
@@ -158,6 +163,7 @@ function editDateEnd(button) {
         dataRefreshIcon.classList.remove("dateRefreshOff");
         dataRefreshIcon.classList.add("dateRefreshOn");
 
+        updateDataFromDB(newDate);
 
         clearInterval(interval);
         animationRefresh("editDateConfirm", "editConfimClick");
@@ -167,14 +173,20 @@ function editDateEnd(button) {
     document.getElementById("popUpDateEdit").classList.remove("popUpEditOn");
     document.getElementById("popUpDateEdit").classList.add("popUpEditOff");
 }
+
 function dateRefresh() {
     dataRefreshIcon.classList.add("dateRefreshOff");
     dataRefreshIcon.classList.remove("dateRefreshOn");
     dateInit();
     clockInit();
+    updateDataFromDB(;);
 }
 
-
+function newFieldValue(checkId) {
+    regs[checkId].style.color = "white";
+    checks[checkId].innerHTML = "check";
+    checks[checkId].classList.add("checked");
+}
 
 //Funzione conteggio ore totali lavorate
 function hoursCount() {
@@ -196,7 +208,7 @@ function hoursCount() {
         mornHou = hours[1] - hours[0];
         pomHou = hours[3] - hours[2];
     }
-    if (mornHou <= 0 || pomHou <= 0 || hours[2] <= hours[0] || hours[3] <= hours[1] ) {
+    if (mornHou <= 0 || pomHou <= 0 || hours[2] <= hours[0] || hours[3] <= hours[1]) {
         valid = false;
     } else {
         if (isNaN(mornHou) == true && isNaN(pomHou) == false) {
@@ -222,17 +234,94 @@ function hoursCount() {
     }
 
 
-    let text,color;
+    let text, color;
 
-    valid ? text = hourLast + ":" + minLast : text = "Invalid";
-    valid ? color = "white" : color = "#fe4c68";
+    if(valid){
+        text = hourLast + ":" + minLast;
+        color = "white"
+        
+    }else{
+        text = "Invalid";
+        color = "#fe4c68"
+    } 
+
+    
 
     document.getElementById("timeTotal").innerHTML = text;
     document.getElementById("timeTotal").style.color = color;
+
+    updateDB();
+
+
 }
 
+function updateDataFromDB(date) {
+    console.log("Reading data from : ", date);
+    db.collection("registrazioni").doc(date)
+        .get()
+        .then(function (doc) {
+            //console.log(date, doc.data());
+            for (let i = 0; i < 4; i++) {
+                regs[i].innerHTML = "No registration";
+                regs[i].style.color = "#e99679";
+                checks[i].innerHTML = "clear";
+                checks[i].classList.remove("checked");
+            }
+            if (doc.exists) {
+
+                regs[0].innerHTML = doc.data().In_mor;
+                regs[1].innerHTML = doc.data().Out_mor;
+                regs[2].innerHTML = doc.data().In_pom;
+                regs[3].innerHTML = doc.data().Out_pom;
+
+                for (let i = 0; i < 4; i++)newFieldValue(i);
+
+                hoursCount();
+
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        })
+        .catch(function (error) {
+            console.log("Error getting document:", error);
+        });
 
 
+
+}
+function updateDB(date) {
+    console.log("Updating data  : ", date);
+    try {
+        db.collection("registrazioni").doc(date)
+            .update({
+                In_mor : regs[0].innerHTML,
+                Out_mor : regs[1].innerHTML,
+                In_pom : regs[2].innerHTML,
+                Out_pom : regs[3].innerHTML
+            })
+            .then(function () {
+                console.log("Document updated");
+            })
+
+    } catch (error) {
+        try {
+            db.collection("registrazioni").doc(date)
+            .set({
+                In_mor : regs[0].innerHTML,
+                Out_mor : regs[1].innerHTML,
+                In_pom : regs[2].innerHTML,
+                Out_pom : regs[3].innerHTML
+            })
+            .then(function () {
+                console.log("Document created");
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+}
 
 //Funzione riavvia l'animazione richiesta disattivando la classe e riattivandola
 function animationRefresh(id, className) {
@@ -244,8 +333,13 @@ function animationRefresh(id, className) {
 function numberIns(str) {
     return str.match(/\d+/g)[0];
 }
+function dateNow(){
+    let dateNow = new Date().toISOString().split("T")[0];
+    let hourNow = new Date().toISOString().split("T")[1].split(" ")[0] + 2;
+    
+}
 
 //Init functions
 dateInit();
 clockInit();
-
+//updateData(new Date().toISOString().split("T")[0]);
