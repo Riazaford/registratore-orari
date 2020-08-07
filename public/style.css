@@ -10,6 +10,21 @@
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
 }
+.logInPopUP{
+    position: absolute;
+    top: 15px;
+    left: 50vw;
+
+    transform: translateX(-150px);
+
+    height: 200px;
+    width: 300px;
+    background-color: gray;
+
+}
+#user{
+    cursor: pointer;
+}
 .main{
     height: 100vh;
      
@@ -37,7 +52,7 @@
     color: rgb(255, 255, 255);
     text-shadow: 0px 1px rgba(0, 0, 0, 0.096);
 
-    cursor: default;
+    cursor: pointer;
 }
 .header:active{
     transform: scale(0.5);

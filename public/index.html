@@ -4,12 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Registra orari</title>
+
+    <!-- SDK From firebase per autenticazione sicura
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+    -->
+    <link type="text/css" rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
+
+    <div class="logInPopUP">
+        <div id="user" onclick="toggleStatus()">
+            <i class="material-icons">user</i>
+            <p id="userName">User name</p>
+        </div>
+    </div>
+    
+
     <div class="main">
         <div class="header">
             <i class="material-icons dateRefreshOff" id="dateRefresh" onclick="dateRefresh()">autorenew</i>
@@ -60,7 +76,7 @@
             </div>
 
             <p class="fixedP">Orario entrata pomeriggio:</p>
-            <div class="regTime" >
+            <div class="regTime">
                 <p id="timeEntPom" style="color: #e99679;">No registration</p>
                 <div class="checkIcon edit">
                     <i class="material-icons" id="editIcon3" onclick="editRowStart(this)">edit</i>
@@ -102,7 +118,7 @@
         <button id="editConfirm" class="editConfimClick buttonOff" onclick="editRowEnd(this)">Ok</button>
         <button id="editCancel" class="editConfimClick" onclick="editRowEnd(this)">Annulla</button>
     </div>
-    
+
     <div class="popUpEditOff" id="popUpDateEdit">
         <div id="dateInputBox">
             <input type="date" id="dateInput">
@@ -118,7 +134,7 @@
     <!-- TODO: Add SDKs for Firebase products that you want to use
              https://firebase.google.com/docs/web/setup#available-libraries -->
     <script src="/__/firebase/7.17.1/firebase-analytics.js"></script>
-
+    <script src="/__/firebase/7.17.1/firebase-auth.js"></script>
     <script src="/__/firebase/7.17.1/firebase-firestore.js"></script>
 
     <!-- Initialize Firebase -->
