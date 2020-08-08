@@ -10,21 +10,83 @@
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
 }
-.logInPopUP{
-    position: absolute;
-    top: 15px;
-    left: 50vw;
 
-    transform: translateX(-150px);
+.landingOn{
+    height: 100vh;
+     
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-    height: 200px;
-    width: 300px;
-    background-color: gray;
+    justify-content: space-around;
+
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #fbac7ebe 0%, #f7cf68bb 100%);
 
 }
-#user{
+.landingOff{
+    display: none;
+}
+#loginForm{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#loginButton{
+    display: inherit;
+    flex-direction: inherit;
+    align-items: inherit;
     cursor: pointer;
+
+    margin-top: 30px;
+
+    font-style: italic;
 }
+#userIcon{
+    font-size: 80px;
+}
+
+
+#loginLoading{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    font-style: italic;
+    
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #fbac7ebe 0%, #f7cf68bb 100%);
+}   
+#loginLoading.deactive{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    font-style: italic;
+
+}
+#loadingIcon{
+    font-size: 80px;
+    animation: rotate 2.2s linear infinite;
+}
+@keyframes rotate{
+    0%{transform: rotate(0deg);}
+    100%{transform: rotate(360deg);}
+}
+.workZoneOn{
+    display: all ;
+}
+.workZoneOff{
+    display: none;
+}
+
 .main{
     height: 100vh;
      
@@ -44,22 +106,19 @@
     display: inline;
     text-align: center;
     transition : 0.2s ease;
-}
-.header > p{
-    font-size: 22px;
-    line-height: 50px;
 
     color: rgb(255, 255, 255);
     text-shadow: 0px 1px rgba(0, 0, 0, 0.096);
+}
+.header > p{
+    font-size: 16px;
+    line-height: 20px;
 
-    cursor: pointer;
+    cursor: default;
 }
-.header:active{
-    transform: scale(0.5);
-}
-.tapToEdit{
+#tapToEdit{
     font-style: italic;
-
+    cursor: pointer;
 }
 .content{
     height: 30vh;
@@ -104,6 +163,8 @@
     50%     { scale: 0.96;}
     100%    { scale: 1;} 
 }
+
+
 .actualRegs{
     height: 400px;
     width: 100%;
@@ -118,6 +179,17 @@
 
     justify-content: space-around;
 }
+@media screen and (min-width: 600px) {
+    .actualRegs {
+        height: 400px;
+        width: 400px;
+        
+        padding-left: 0%;
+        padding-right: 0%;
+
+    }
+}
+
 .fixedP{
     color: rgba(0, 0, 0, 0.582);
     text-shadow: 0px 1px rgba(0, 0, 0, 0.096);
@@ -189,7 +261,6 @@
 
     opacity: 1;
 }
-
 .dateRefreshOff{
     animation : dateRefreshOff 0.5s ease forwards;
 }
@@ -272,6 +343,8 @@
     color: rgba(150, 245, 121, 0.747);
     border: 2px solid rgba(157, 247, 130, 0.747);
 }
+
+
 #popUpEdit{
     position: absolute;
     top: 50vh;
@@ -352,6 +425,8 @@
 
     grid-area: cancel;
 }
+
+
 #popUpDateEdit{
     position: absolute;
     top: 13vh;
@@ -426,11 +501,11 @@
 }
 .popUpEditOff{
     visibility: hidden;
-    transition: 0.8s;
+    transition: 0.4s;
 }
 .popUpEditOn{
     visibility: visible;
-    transition: 0.8s;
+    transition: 0.4s;
 }
 .buttonOn{
     pointer-events: all;

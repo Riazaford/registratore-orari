@@ -1,109 +1,18 @@
-
-
-/*
-
-/* //OK funzionante
-    db.collection("registrazioni").where("hour", "==", "13:23")
-    .get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-        })
-    })
-
-
-db.collection("registrazioni")
-    .get()
-    .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            oreIngS.push(doc.data().oraIngMat.toDate());
-            //console.log(typeof doc.data().oraIngMat.seconds);
-            //console.log(`${doc.id} => ${doc.data()}`);
-        });
-        try {
-            oreIngS.forEach(element => {
-                console.log(element.toLocaleDateString(), element.toLocaleTimeString());
-                //oreIng.push(toDateTime(Number(element)));
-            });
-            //console.log(oreIngS[0].toLocaleDateString(),oreIngS[0].toLocaleTimeString());
-        } catch (error) {
-            console.log(error);
-        }
-
-    });
-
-*/
+//DB declaration
 const db = firebase.firestore();
 
-  
-// Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
+//Google login
+const provider = new firebase.auth.GoogleAuthProvider();
 
-var uiConfig = {
-    callbacks: {
-      signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-        // User successfully signed in.
-        // Return type determines whether we continue the redirect automatically
-        // or whether we leave that to developer to handle.
-        return true;
-      },
-      uiShown: function() {
-        // The widget is rendered.
-        // Hide the loader.
-        document.getElementById('loader').style.display = 'none';
-      }
-    },
-    // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-    signInFlow: 'popup',
-    signInSuccessUrl: '<url-to-redirect-to-on-success>',
-    signInOptions: [
-      // Leave the lines as is for the providers you want to offer your users.
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      //firebase.auth.EmailAuthProvider.PROVIDER_ID
-    ],
-    // Terms of service url.
-    //tosUrl: '<your-tos-url>',
-    // Privacy policy url.
-    //privacyPolicyUrl: '<your-privacy-policy-url>'
-  };
 
-// The start method will wait until the DOM is loaded.
-ui.start('#firebaseui-auth-container', uiConfig);
 
-window.onunload = function () {
-    firebase.auth()
-    .signOut()
-    .then(function() {
-        // Sign-out successful.
-      })
-    .catch(function(error) {
-        
-        // An error happened.
-      });
-      
-};
-function logOut(){
-    firebase.auth()
-    .signOut()
-    .catch(function(error) {
-        console.log(error);
-        // An error happened.
-      });
-}
-
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      // User is signed in.
-      document.getElementById("userName").innerHTML = user.displayName +  "</br>Log out";
-      // ...
-    } else {
-      // User is signed out.
-      console.log("User logged out");
-      document.getElementById("userName").innerHTML = "Log in";
-    }
-  });
-
+//DOM items
+const landing = document.getElementById("landing");
+const loading = document.getElementById("loginLoading");
+const workZone = document.getElementById("workZone");
+const dateTimeLabel = document.getElementById("date");
+const dataRefreshIcon = document.getElementById("dateRefresh");
+const userName = document.getElementById("userName");
 const regs = [
     document.getElementById("timeEntMor"),
     document.getElementById("timeExitMor"),
@@ -117,16 +26,100 @@ const checks = [
     document.getElementById("checkExitPom"),
 ];
 
-const dateTimeLabel = document.getElementById("date");
-const dataRefreshIcon = document.getElementById("dateRefresh");
 var selectedDate;
+
+
+function logIn() {
+    //Riattivo il caricamento
+    loading.classList.toggle("deactive");
+    console.log("Richiedo l'autorizzazione");
+    firebase.auth()
+        .signInWithRedirect(provider)
+}
+
+firebase.auth()
+    .getRedirectResult()
+    .then(function (result) {
+        if (result.credential) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            token = result.credential.accessToken;
+            // The signed-in user info.
+            user = result.user;
+
+            //console.log(result);
+            toggleStatus();
+
+            updateDataFromDB(selectedDate);
+        }
+    }).catch(function (error) {
+        // Handle Errors here.
+        errorCode = error.code;
+        errorMessage = error.message;
+        // The email of the user's account used.
+        email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        credential = error.credential;
+        // ...
+    });
+
+
+window.onunload = function () {
+    firebase.auth()
+        .signOut()
+        .then(function () {
+            // Sign-out successful.
+        })
+        .catch(function (error) {
+
+            // An error happened.
+        });
+
+};
+function logOut() {
+    firebase.auth()
+        .signOut()
+        .catch(function (error) {
+            console.log(error);
+            // An error happened.
+        });
+}
+
+function toggleStatus() {
+    console.log("Toggolo lo stato");
+    if (landing.classList[0] == "landingOn") {
+        //console.log("true");
+        landing.classList.remove("landingOn");
+        landing.classList.add("landingOff");
+        workZone.classList.remove("workZoneOff");
+        workZone.classList.add("workZoneOn");
+    } else {
+        //console.log("falzo");
+        landing.classList.add("landingOn");
+        landing.classList.remove("landingOff");
+        workZone.classList.add("workZoneOff");
+        workZone.classList.remove("workZoneOn");
+    }
+}
+
+firebase.auth()
+    .onAuthStateChanged(function (user) {
+        if (user) {
+            console.log("Login effettuato correttamente da : " + user.displayName);
+            userName.innerHTML = "Ciao " + user.displayName.split(" ")[0];
+        } else {
+            // User is signed out.
+            console.log("No user logged in");
+        }
+        loading.classList.toggle("deactive");
+    });
+
 
 function dateInit() {
     let date = new Date();
     dateTimeLabel.innerHTML = "Data e ora di oggi: </br>" + date.toLocaleString();
     let dateValues = date.toLocaleDateString().split("/");
-    for(let x = 0; x < 3; x++){
-        if(dateValues[x].length == 1) dateValues[x] = "0"+ dateValues[x];
+    for (let x = 0; x < 3; x++) {
+        if (dateValues[x].length == 1) dateValues[x] = "0" + dateValues[x];
     }
     selectedDate = dateValues[2] + "-" + dateValues[1] + "-" + dateValues[0];
     //dateTimeLabel.innerHTML = "Data e ora di oggi: </br>" + date.toISOString();
@@ -135,7 +128,6 @@ function dateInit() {
 function clockInit() {
     interval = setInterval(dateInit, 1000);
 }
-
 function newRegistration(buttonType) {
     let hour = new Date().toTimeString().split(":")[0] + ":" + new Date().toTimeString().split(":")[1]; //Hour in format HH:MM;
 
@@ -166,7 +158,6 @@ function newRegistration(buttonType) {
 function deleteRow(id) {
 
     arrayId = numberIns(id.id) - 1; // id.id = binIcon1
-
 
     regs[arrayId].innerHTML = "No registration";
     regs[arrayId].style.color = "#e99679";
@@ -261,7 +252,6 @@ function newFieldValue(checkId) {
     checks[checkId].innerHTML = "check";
     checks[checkId].classList.add("checked");
 }
-
 //Funzione conteggio ore totali lavorate
 function hoursCount() {
     let hours = []; //0 = ing mattina , 1 = out mattina , 2 = ing pom , 3 = out pom
@@ -322,7 +312,7 @@ function hoursCount() {
     document.getElementById("timeTotal").innerHTML = text;
     document.getElementById("timeTotal").style.color = color;
 
-    updateDB(selectedDate);
+    updateDBFromData(selectedDate);
 
 }
 
@@ -345,7 +335,9 @@ function updateDataFromDB(date) {
                 regs[2].innerHTML = doc.data().In_pom;
                 regs[3].innerHTML = doc.data().Out_pom;
 
-                for (let i = 0; i < 4; i++)newFieldValue(i);
+                for (let i = 0; i < 4; i++) {
+                    regs[i].innerHTML != "No registration" ? newFieldValue(i) : regs[i].innerHTML = "No registration";
+                };
 
                 hoursCount();
 
@@ -363,7 +355,7 @@ function updateDataFromDB(date) {
         });
 
 }
-function updateDB(date) {
+function updateDBFromData(date) {
 
     //try {
     console.log("Updating data  : ", date);
@@ -408,18 +400,9 @@ function numberIns(str) {
     return str.match(/\d+/g)[0];
 }
 
-function dateNow() {
-
-    let dateNow = new Date().toLocaleDateString().split("/")[2] + "-"
-        + new Date().toLocaleDateString().split("/")[1] + "-"
-        + new Date().toLocaleDateString().split("/")[0];
-
-    return dateNow;
-    //let hourNow = new Date().toISOString().split("T")[1].split(" ")[0] + 2;
-
-}
 
 //Init functions
 dateInit();
 clockInit();
-updateDataFromDB(selectedDate);
+
+

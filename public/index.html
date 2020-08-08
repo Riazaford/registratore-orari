@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Registra orari</title>
 
@@ -17,98 +17,111 @@
 </head>
 
 <body>
-
-    <div class="logInPopUP">
-        <div id="user" onclick="toggleStatus()">
-            <i class="material-icons">user</i>
-            <p id="userName">User name</p>
-        </div>
+    <div id="loginLoading">
+        <i id="loadingIcon" class="material-icons">autorenew</i>
+        <h3>Please wait</h3>
     </div>
+
+    <div id="landing" class="landingOn">
+        <div class="" id="loginForm">
+            <h1>BENVENUTO</h1>
+            <div id="loginButton" onclick="logIn()">
+                <i id="userIcon" class="material-icons">account_circle</i>
+                <p>Esegui il Log in per continuare</p>
+            </div>
+        </div>
+        
+    </div>
+
     
 
-    <div class="main">
-        <div class="header">
-            <i class="material-icons dateRefreshOff" id="dateRefresh" onclick="dateRefresh()">autorenew</i>
-            <p id="date" onclick="editDataStart()">[date]</p>
-            <p class="tapToEdit" onclick="editDataStart()">Tocca per cambiare giorno</p>
-        </div>
+    <div id="workZone" class="workZoneOff">
+        <div class="main">
+            <div class="header">
+                <p id="userName">Username</p>
+                <!-- <p id="logout" onclick="logOut()"> log out</p> -->
+                <i class="material-icons dateRefreshOff" id="dateRefresh" onclick="dateRefresh()">autorenew</i>
+                <p id="date">[date]</p>
+                <p id="tapToEdit" onclick="editDataStart()">Tocca per cambiare giorno</p>
+            </div>
 
 
-        <div class="content">
-            <button class="bButton red" id="regEnt" onclick="newRegistration('enter')">
-                Registra</br>entrata
-            </button>
-            <button class="bButton green" id="regExit" onclick="newRegistration('exit')">
-                Registra</br>uscita
-            </button>
-            <!-- <button class="bButton blue" id="regFin" onclick="register('final')">
+            <div class="content">
+                <button class="bButton red" id="regEnt" onclick="newRegistration('enter')">
+                    Registra</br>entrata
+                </button>
+                <button class="bButton green" id="regExit" onclick="newRegistration('exit')">
+                    Registra</br>uscita
+                </button>
+                <!-- <button class="bButton blue" id="regFin" onclick="register('final')">
                 Registra</br>giornata
             </button> -->
+            </div>
+
+            <div class="actualRegs">
+                <p class="fixedP">Orario entrata mattino:</p>
+                <div class="regTime">
+                    <p id="timeEntMor" style="color: #e99679;">No registration</p>
+                    <div class="checkIcon edit">
+                        <i class="material-icons" id="editIcon1" onclick="editRowStart(this)">edit</i>
+                    </div>
+                    <div class="checkIcon bin">
+                        <i class="material-icons" id="binIcon1" onclick="deleteRow(this)">delete</i>
+                    </div>
+                    <div class="checkIcon state">
+                        <i class="material-icons" id="checkEntMor">clear</i>
+                    </div>
+                </div>
+
+                <p class="fixedP">Orario uscita mattino:</p>
+                <div class="regTime">
+                    <p id="timeExitMor" style="color: #e99679;">No registration</p>
+                    <div class="checkIcon edit">
+                        <i class="material-icons" id="editIcon2" onclick="editRowStart(this)">edit</i>
+                    </div>
+                    <div class="checkIcon bin">
+                        <i class="material-icons" id="binIcon2" onclick="deleteRow(this)">delete</i>
+                    </div>
+                    <div class="checkIcon state">
+                        <i class="material-icons" id="checkExitMor">clear</i>
+                    </div>
+                </div>
+
+                <p class="fixedP">Orario entrata pomeriggio:</p>
+                <div class="regTime">
+                    <p id="timeEntPom" style="color: #e99679;">No registration</p>
+                    <div class="checkIcon edit">
+                        <i class="material-icons" id="editIcon3" onclick="editRowStart(this)">edit</i>
+                    </div>
+                    <div class="checkIcon bin">
+                        <i class="material-icons" id="binIcon3" onclick="deleteRow(this)">delete</i>
+                    </div>
+                    <div class="checkIcon state">
+                        <i class="material-icons" id="checkEntPom">clear</i>
+                    </div>
+                </div>
+
+                <p class="fixedP">Orario uscita pomeriggio:</p>
+                <div class="regTime">
+                    <p id="timeExitPom" style="color: #e99679;">No registration</p>
+                    <div class="checkIcon edit">
+                        <i class="material-icons" id="editIcon4" onclick="editRowStart(this)">edit</i>
+                    </div>
+                    <div class="checkIcon bin">
+                        <i class="material-icons" id="binIcon4" onclick="deleteRow(this)">delete</i>
+                    </div>
+                    <div class="checkIcon state">
+                        <i class="material-icons" id="checkExitPom">clear</i>
+                    </div>
+                </div>
+                <p class="fixedP">Totale ore "lavorate":</p>
+                <div class="regTime">
+                    <p id="timeTotal" style="color: #fe4c68;">Invalid</p>
+                </div>
+            </div>
         </div>
-
-        <div class="actualRegs">
-            <p class="fixedP">Orario entrata mattino:</p>
-            <div class="regTime">
-                <p id="timeEntMor" style="color: #e99679;">No registration</p>
-                <div class="checkIcon edit">
-                    <i class="material-icons" id="editIcon1" onclick="editRowStart(this)">edit</i>
-                </div>
-                <div class="checkIcon bin">
-                    <i class="material-icons" id="binIcon1" onclick="deleteRow(this)">delete</i>
-                </div>
-                <div class="checkIcon state">
-                    <i class="material-icons" id="checkEntMor">clear</i>
-                </div>
-            </div>
-
-            <p class="fixedP">Orario uscita mattino:</p>
-            <div class="regTime">
-                <p id="timeExitMor" style="color: #e99679;">No registration</p>
-                <div class="checkIcon edit">
-                    <i class="material-icons" id="editIcon2" onclick="editRowStart(this)">edit</i>
-                </div>
-                <div class="checkIcon bin">
-                    <i class="material-icons" id="binIcon2" onclick="deleteRow(this)">delete</i>
-                </div>
-                <div class="checkIcon state">
-                    <i class="material-icons" id="checkExitMor">clear</i>
-                </div>
-            </div>
-
-            <p class="fixedP">Orario entrata pomeriggio:</p>
-            <div class="regTime">
-                <p id="timeEntPom" style="color: #e99679;">No registration</p>
-                <div class="checkIcon edit">
-                    <i class="material-icons" id="editIcon3" onclick="editRowStart(this)">edit</i>
-                </div>
-                <div class="checkIcon bin">
-                    <i class="material-icons" id="binIcon3" onclick="deleteRow(this)">delete</i>
-                </div>
-                <div class="checkIcon state">
-                    <i class="material-icons" id="checkEntPom">clear</i>
-                </div>
-            </div>
-
-            <p class="fixedP">Orario uscita pomeriggio:</p>
-            <div class="regTime">
-                <p id="timeExitPom" style="color: #e99679;">No registration</p>
-                <div class="checkIcon edit">
-                    <i class="material-icons" id="editIcon4" onclick="editRowStart(this)">edit</i>
-                </div>
-                <div class="checkIcon bin">
-                    <i class="material-icons" id="binIcon4" onclick="deleteRow(this)">delete</i>
-                </div>
-                <div class="checkIcon state">
-                    <i class="material-icons" id="checkExitPom">clear</i>
-                </div>
-            </div>
-            <p class="fixedP">Totale ore "lavorate":</p>
-            <div class="regTime">
-                <p id="timeTotal" style="color: #fe4c68;">Invalid</p>
-            </div>
-        </div>
-
     </div>
+
 
     <div class="popUpEditOff" id="popUpEdit">
         <div id="timeInputBox">
@@ -121,7 +134,7 @@
 
     <div class="popUpEditOff" id="popUpDateEdit">
         <div id="dateInputBox">
-            <input type="date" id="dateInput">
+            <input type="date" id="dateInput" value="2020-01-01">
         </div>
 
         <button id="editDateConfirm" class="editConfimClick buttonOn" onclick="editDateEnd(this)">Ok</button>
