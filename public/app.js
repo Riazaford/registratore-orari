@@ -132,7 +132,7 @@ function newRegistration(buttonType) {
     let hour = new Date().toTimeString().split(":")[0] + ":" + new Date().toTimeString().split(":")[1]; //Hour in format HH:MM;
 
     if (buttonType === "enter") {
-        if (hour < "15:00:00") {
+        if (hour < "12:00:00") {
             regs[0].innerHTML = hour;
             newFieldValue(0);
         } else {
