@@ -164,18 +164,18 @@ function newRegistration(buttonType) {
     }
     if (buttonType === "exit") {
 
-        if (min > 0) {
+        if (min < 15) {
             hour = hour.split(":")[0] + ':00';
         } else {
-            if (min > 15) {
+            if (min < 30) {
                 hour = hour.split(":")[0] + ':15';
             }
             else{
-                if (min > 30) {
+                if (min < 45) {
                     hour = hour.split(":")[0] + ':30';
                 }
                 else{
-                    if (min > 45 ) {
+                    if (min < 60 ) {
                         hour = hour.split(":")[0]  + ':45';
                     }  
                 }
