@@ -4,8 +4,6 @@ const db = firebase.firestore();
 //Google login
 const provider = new firebase.auth.GoogleAuthProvider();
 
-
-
 //DOM items
 const landing = document.getElementById("landing");
 const loading = document.getElementById("loginLoading");
@@ -62,7 +60,7 @@ firebase.auth()
         // ...
     });
 
-
+/*
 window.onunload = function () {
     firebase.auth()
         .signOut()
@@ -75,6 +73,7 @@ window.onunload = function () {
         });
 
 };
+*/
 function logOut() {
     firebase.auth()
         .signOut()
@@ -140,14 +139,14 @@ function newRegistration(buttonType) {
             if (min < 30) {
                 hour = hour.split(":")[0] + ':30';
             }
-            else{
+            else {
                 if (min < 45) {
                     hour = hour.split(":")[0] + ':45';
                 }
-                else{
-                    if (min < 60 ) {
-                        hour = (Number(hour.split(":")[0]) + 1).toString()  + ':00';
-                    }  
+                else {
+                    if (min < 60) {
+                        hour = (Number(hour.split(":")[0]) + 1).toString() + ':00';
+                    }
                 }
             }
         }
@@ -170,14 +169,14 @@ function newRegistration(buttonType) {
             if (min < 30) {
                 hour = hour.split(":")[0] + ':15';
             }
-            else{
+            else {
                 if (min < 45) {
                     hour = hour.split(":")[0] + ':30';
                 }
-                else{
-                    if (min < 60 ) {
-                        hour = hour.split(":")[0]  + ':45';
-                    }  
+                else {
+                    if (min < 60) {
+                        hour = hour.split(":")[0] + ':45';
+                    }
                 }
             }
         }
@@ -258,6 +257,7 @@ function editRowEnd(button) {
 function editDataStart() {
     document.getElementById("popUpDateEdit").classList.remove("popUpEditOff");
     document.getElementById("popUpDateEdit").classList.add("popUpEditOn");
+    document.getElementById("dateInput").value = selectedDate;
 }
 function editDateEnd(button) {
     if (button.id == "editDateConfirm") {
@@ -283,6 +283,7 @@ function dateRefresh() {
     dataRefreshIcon.classList.remove("dateRefreshOn");
     dateInit();
     clockInit();
+
     updateDataFromDB(selectedDate);
 }
 
@@ -357,7 +358,7 @@ function hoursCount() {
 
 function updateDataFromDB(date) {
     console.log("Reading data from : ", date);
-    db.collection("registrazioni").doc(date)
+    db.collection(user.displayName).doc(date)
         .get()
         .then(function (doc) {
             //console.log(date, doc.data());
@@ -388,6 +389,7 @@ function updateDataFromDB(date) {
                 document.getElementById("timeTotal").style.color = "#fe4c68";
 
             }
+
         })
         .catch(function (error) {
             console.log("Error getting document:", error);
@@ -398,7 +400,7 @@ function updateDBFromData(date) {
 
     //try {
     console.log("Updating data  : ", date);
-    db.collection("registrazioni").doc(date)
+    db.collection(user.displayName).doc(date)
         .update({
             In_mor: regs[0].innerHTML,
             Out_mor: regs[1].innerHTML,
@@ -412,7 +414,7 @@ function updateDBFromData(date) {
             console.log("Documento non trovato, creo nuovo documento");
             console.log("Creating data  : ", date);
 
-            db.collection("registrazioni").doc(date)
+            db.collection(user.displayName).doc(date)
                 .set({
                     In_mor: regs[0].innerHTML,
                     Out_mor: regs[1].innerHTML,
@@ -426,6 +428,7 @@ function updateDBFromData(date) {
                     console.error("Errore nella creazione:", error);
                 })
         });
+
 }
 
 //Funzione riavvia l'animazione richiesta disattivando la classe e riattivandola
