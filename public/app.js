@@ -130,9 +130,30 @@ function clockInit() {
 }
 function newRegistration(buttonType) {
     let hour = new Date().toTimeString().split(":")[0] + ":" + new Date().toTimeString().split(":")[1]; //Hour in format HH:MM;
+    let min = new Date().toTimeString().split(":")[1];
+
 
     if (buttonType === "enter") {
+        if (min < 15) {
+            hour = hour.split(":")[0] + ':15';
+        } else {
+            if (min < 30) {
+                hour = hour.split(":")[0] + ':30';
+            }
+            else{
+                if (min < 45) {
+                    hour = hour.split(":")[0] + ':45';
+                }
+                else{
+                    if (min < 60 ) {
+                        hour = (Number(hour.split(":")[0]) + 1).toString()  + ':00';
+                    }  
+                }
+            }
+        }
+
         if (hour < "12:00:00") {
+
             regs[0].innerHTML = hour;
             newFieldValue(0);
         } else {
@@ -142,6 +163,24 @@ function newRegistration(buttonType) {
         animationRefresh("regEnt", "buttonClicked");
     }
     if (buttonType === "exit") {
+
+        if (min > 0) {
+            hour = hour.split(":")[0] + ':00';
+        } else {
+            if (min > 15) {
+                hour = hour.split(":")[0] + ':15';
+            }
+            else{
+                if (min > 30) {
+                    hour = hour.split(":")[0] + ':30';
+                }
+                else{
+                    if (min > 45 ) {
+                        hour = hour.split(":")[0]  + ':45';
+                    }  
+                }
+            }
+        }
         if (hour < "15:00:00") {
             regs[1].innerHTML = hour;
             newFieldValue(1);
