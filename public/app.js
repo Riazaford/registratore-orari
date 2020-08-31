@@ -11,6 +11,7 @@ const workZone = document.getElementById("workZone");
 const dateTimeLabel = document.getElementById("date");
 const dataRefreshIcon = document.getElementById("dateRefresh");
 const userName = document.getElementById("userName");
+const tapToDownload = document.getElementById("tapToDownload");
 const regs = [
     document.getElementById("timeEntMor"),
     document.getElementById("timeExitMor"),
@@ -356,6 +357,91 @@ function hoursCount() {
 
 }
 
+const atrib = "data:text/plain;charset=utf-8,";
+const sep = ",";
+const cap = "\n";
+let testo = "";
+
+function hoursCountLite(obj) {
+    let hours = []; //0 = ing mattina , 1 = out mattina , 2 = ing pom , 3 = out pom
+    let minuts = [];
+    let mornHou, pomHou, mornMin, pomMin = 0;
+    let minLast, hourLast = 0;
+    let valid = false;
+    let text = "";
+
+    hours[0] = obj.In_mor.split(":")[0];
+    minuts[0] = obj.In_mor.split(":")[1];
+
+    hours[1] = obj.Out_mor.split(":")[0];
+    minuts[1] = obj.Out_mor.split(":")[1];
+
+    hours[2] = obj.In_pom.split(":")[0];
+    minuts[2] = obj.In_pom.split(":")[1];
+
+    hours[3] = obj.Out_pom.split(":")[0];
+    minuts[3] = obj.Out_pom.split(":")[1];
+
+    for (i = 1; i <= 4; i++) {
+        mornMin = minuts[1] - minuts[0];
+        pomMin = minuts[3] - minuts[2];
+        mornHou = hours[1] - hours[0];
+        pomHou = hours[3] - hours[2];
+    }
+    if (mornHou <= 0 || pomHou <= 0 || hours[2] <= hours[0] || hours[3] <= hours[1]) {
+        valid = false;
+    } else {
+        if (isNaN(mornHou) == true && isNaN(pomHou) == false) {
+            hourLast = pomHou;
+            minLast = pomMin;
+            valid = true;
+        }
+        if (isNaN(mornHou) == false && isNaN(pomHou) == true) {
+            hourLast = mornHou;
+            minLast = mornMin;
+            valid = true;
+        }
+        if (isNaN(mornHou) == false && isNaN(pomHou) == false) {
+            hourLast = mornHou + pomHou;
+            minLast = mornMin + pomMin;
+            valid = true;
+        }
+
+        if (minLast < 0 && hourLast > 0) {
+            hourLast = hourLast - 1;
+            minLast = 60 + minLast;
+        }
+    }
+    valid ? text = hourLast + ":" + minLast : text = "invalid";
+
+    return text;
+}
+
+function downloadAll() {
+    db.collection(user.displayName)
+        .get()
+        .then(function (doc) {
+            testo = "";
+            doc.docs.forEach((doc) => {
+                testo += doc.id.toString() + sep + hoursCountLite(doc.data()) + cap;
+            })
+
+            
+            let dwlink = document.createElement('A');
+            let date = new Date();
+
+            while (tapToDownload.firstChild) { tapToDownload.removeChild(tapToDownload.firstChild); };
+            
+            dwlink.setAttribute('href',atrib + encodeURIComponent( testo));
+            dwlink.setAttribute('download', date.getTime().toString() + ".csv");
+            dwlink.innerHTML = "Clicca qui per scaricare";
+            tapToDownload.appendChild(dwlink);
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+}
 function updateDataFromDB(date) {
     console.log("Reading data from : ", date);
     db.collection(user.displayName).doc(date)
